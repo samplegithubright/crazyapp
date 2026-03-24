@@ -36,6 +36,7 @@ const items = [
 ];
 
 export default function Home() {
+  
   return (
     <div className="min-h-screen bg-gray-100 px-4 sm:px-6 lg:px-12 py-16">
       

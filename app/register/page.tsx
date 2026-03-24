@@ -11,21 +11,32 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e:any) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+const handleSubmit = async (e: any) => {
+  e.preventDefault();
+  setLoading(true);
+  setError("");
 
-    try {
-      await new Promise((res) => setTimeout(res, 1200));
-      console.log({ name, email, password });
-    } catch (err) {
-      setError("Something went wrong");
-    } finally {
-      setLoading(false);
+  try {
+    const res = await fetch("/api/register", {
+      method: "POST",
+      body: JSON.stringify({ name, email, password }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error);
     }
-  };
 
+    // optional: auto login after register
+    window.location.href = "/login";
+
+  } catch (err: any) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div className="min-h-screen flex w-full pt-16">
       {/* LEFT */}

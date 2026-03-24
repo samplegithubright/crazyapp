@@ -3,28 +3,40 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Mail, Lock, Loader2 } from "lucide-react";
-
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+const router = useRouter();
+  const handleSubmit = async (e: any) => {
+  e.preventDefault();
+  setLoading(true);
+  setError("");
 
-  const handleSubmit = async (e:any) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+  try {
+    const res = await signIn("credentials", {
+      email,
+      password,
+      redirect: false, // IMPORTANT
+    });
 
-    try {
-      // simulate API
-      await new Promise((res) => setTimeout(res, 1200));
-      console.log({ email, password });
-    } catch (err) {
-      setError("Invalid credentials");
-    } finally {
-      setLoading(false);
+    if (res?.error) {
+      setError(res.error);
+      return;
     }
-  };
+
+    // success → redirect
+    router.push("/dashboard");
+
+  } catch (err) {
+    setError("Something went wrong");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen flex w-full pt-17">

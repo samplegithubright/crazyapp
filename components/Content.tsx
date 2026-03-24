@@ -5,10 +5,11 @@ import {useRouter} from 'next/navigation'
 
 
 
+
 export default function TemplatePage() {
 
 const router=useRouter();
-
+ 
   return (
     <div className="bg-gray-100 py-6 sm:py-8 md:py-10 lg:py-8 xl:py-10 px-3 sm:px-4 md:px-6 lg:px-8 flex items-center justify-center">
       <div className="w-full max-w-sm sm:max-w-2xl md:max-w-4xl lg:max-w-5xl xl:max-w-6xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden grid grid-cols-1 md:grid-cols-2">

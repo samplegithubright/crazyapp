@@ -3,11 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Menu, X, ChevronDown } from "lucide-react";
-
+import { useSession } from "next-auth/react";
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
-
+const { data: session } = useSession();
   const toggleMenu = (menu: string) => {
     setActiveMenu(activeMenu === menu ? null : menu);
   };
@@ -87,6 +87,8 @@ export default function Header() {
 
     {/* RIGHT SIDE */}
     <div className="hidden md:flex items-center gap-3">
+  {!session ? (
+    <>
       <Link
         href="/login"
         className="px-4 py-1.5 rounded-lg border border-gray-300 text-gray-700 hover:border-[#d7ac38] hover:text-[#d7ac38] transition text-sm"
@@ -100,7 +102,16 @@ export default function Header() {
       >
         Sign Up
       </Link>
-    </div>
+    </>
+  ) : (
+    <Link
+      href="/dashboard"
+      className="px-4 py-1.5 bg-[#0a1f44] text-white rounded-lg hover:opacity-90 shadow-sm text-sm"
+    >
+      Dashboard
+    </Link>
+  )}
+</div>
 
     {/* MOBILE BUTTON */}
     <button className="md:hidden" onClick={() => setMobileOpen(!mobileOpen)}>
@@ -185,14 +196,22 @@ export default function Header() {
   ))}
 
   {/* AUTH */}
-  <div className="mt-4 flex flex-col gap-3">
-    <Link href="/login" className="text-center px-4 py-2 border border-gray-300 rounded-md">
-      Login
+ <div className="mt-4 flex flex-col gap-3">
+  {!session ? (
+    <>
+      <Link href="/login" className="text-center px-4 py-2 border border-gray-300 rounded-md">
+        Login
+      </Link>
+      <Link href="/signup" className="text-center px-4 py-2 bg-[#d7ac38] text-white rounded-md">
+        Sign Up
+      </Link>
+    </>
+  ) : (
+    <Link href="/dashboard" className="text-center px-4 py-2 bg-[#0a1f44] text-white rounded-md">
+      Dashboard
     </Link>
-    <Link href="/signup" className="text-center px-4 py-2 bg-[#d7ac38] text-white rounded-md">
-      Sign Up
-    </Link>
-  </div>
+  )}
+</div>
 </div>
 </header>
   );

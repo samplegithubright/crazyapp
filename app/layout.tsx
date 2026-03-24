@@ -1,3 +1,6 @@
+"use client";
+
+import { SessionProvider } from "next-auth/react";
 import type { Metadata } from "next";
 import "./globals.css";
 import Footer from "@/components/Footer"
@@ -10,8 +13,8 @@ export default function RootLayout({
   return (
     <html>
       <body className="min-h-full flex flex-col">
-        <Navbar/>
-        {children}
+        
+       <SessionProvider><Navbar/>{children}</SessionProvider>
         <Footer/>
         
         
