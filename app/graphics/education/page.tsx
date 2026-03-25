@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search } from "lucide-react";
+import { Search, Lock, Download } from "lucide-react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 
@@ -23,11 +23,11 @@ const filters = [
 
 const items = [
   { id: 1, title: "Valentine Background", img: "/ai.jpeg", category: "background" },
-  { id: 2, title: "Nature Tree", img: "/images/bg2.jpg", category: "nature" },
-  { id: 3, title: "Stock Market", img: "/images/bg3.jpg", category: "business" },
-  { id: 4, title: "Fire Particles", img: "/images/bg4.jpg", category: "background" },
-  { id: 5, title: "Confetti", img: "/images/bg5.jpg", category: "b-roll" },
-  { id: 6, title: "Light Streaks", img: "/images/bg6.jpg", category: "technology" },
+  { id: 2, title: "Nature Tree", img: "/new.jpg", category: "nature" },
+  { id: 3, title: "Stock Market", img: "/web.jpg", category: "business" },
+  { id: 4, title: "Fire Particles", img: "/mobile.jpg", category: "background" },
+  { id: 5, title: "Confetti", img: "/new.jpg", category: "b-roll" },
+  { id: 6, title: "Light Streaks", img: "/ai.jpeg", category: "technology" },
 ];
 
 export default function VideoTemplates() {
@@ -134,38 +134,47 @@ export default function VideoTemplates() {
         <div className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
           {filteredItems.length > 0 ? (
             filteredItems.map((item) => (
-              <div key={item.id} className="group bg-white rounded-xl overflow-hidden shadow hover:shadow-lg transition relative">
-
+              <div
+                key={item.id}
+                className="group bg-white rounded-xl overflow-hidden shadow hover:shadow-xl transition duration-300"
+              >
                 {/* IMAGE */}
                 <div className="relative overflow-hidden">
                   <img
                     src={item.img}
                     alt={item.title}
-                    className={`w-full h-48 object-cover transition duration-500 ${
-                      !isLoggedIn ? "blur-sm group-hover:blur-none" : ""
-                    }`}
+                    className="w-full h-48 object-cover transition duration-500 group-hover:scale-110"
                   />
 
-                  {/* LOCK (Logged Out) */}
-                  {!isLoggedIn && (
-                    <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-white">
-                      🔒
-                      <p className="text-sm mt-2">Login to download</p>
-                    </div>
-                  )}
+                  {/* GRADIENT OVERLAY */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300"></div>
 
-                  {/* DOWNLOAD BUTTON (Logged In) */}
-                  {isLoggedIn && (
-                    <a
-                      href={item.img}
-                      download
-                      className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition"
-                    >
-                      <span className="bg-white text-black text-sm px-4 py-2 rounded-full font-medium">
-                        Download
-                      </span>
-                    </a>
-                  )}
+                  {/* PREMIUM ICON */}
+                  <div className="absolute top-3 right-3 z-10">
+                    {!isLoggedIn ? (
+                      <Link href="/login" className="relative group/icon">
+                        <div className="p-2 rounded-full bg-black/60 backdrop-blur-md border border-white/20 shadow-lg transition transform hover:scale-110 hover:bg-black">
+                          <Lock size={16} className="text-white" />
+                        </div>
+
+                        {/* Tooltip */}
+                        <span className="absolute right-0 mt-2 text-xs bg-black text-white px-2 py-1 rounded opacity-0 group-hover/icon:opacity-100 transition whitespace-nowrap">
+                          Login to download
+                        </span>
+                      </Link>
+                    ) : (
+                      <a href={item.img} download className="relative group/icon">
+                        <div className="p-2 rounded-full bg-white/80 backdrop-blur-md border border-white/30 shadow-lg transition transform hover:scale-110 hover:bg-white">
+                          <Download size={16} className="text-black" />
+                        </div>
+
+                        {/* Tooltip */}
+                        <span className="absolute right-0 mt-2 text-xs bg-black text-white px-2 py-1 rounded opacity-0 group-hover/icon:opacity-100 transition whitespace-nowrap">
+                          Download
+                        </span>
+                      </a>
+                    )}
+                  </div>
                 </div>
 
                 {/* CONTENT */}
@@ -175,11 +184,6 @@ export default function VideoTemplates() {
                     {item.category}
                   </p>
                 </div>
-
-                {/* CLICK ACTION */}
-                {!isLoggedIn && (
-                  <Link href="/login" className="absolute inset-0" />
-                )}
               </div>
             ))
           ) : (

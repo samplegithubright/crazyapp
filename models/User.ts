@@ -15,6 +15,7 @@ const UserSchema = new Schema({
     required: [true, "Password is required"],
     select: false,
   },
+  
   role: {
     type: String,
     enum: ["user", "admin"],
