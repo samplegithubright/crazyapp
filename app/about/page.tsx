@@ -2,6 +2,7 @@
 
 export default function AboutPage() {
   return (
+    
     <div className="bg-[#f6f8fc] text-gray-800 pt-16">
 
       {/* HERO */}

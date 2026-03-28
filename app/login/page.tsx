@@ -10,33 +10,33 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-const router = useRouter();
+  const router = useRouter();
   const handleSubmit = async (e: any) => {
-  e.preventDefault();
-  setLoading(true);
-  setError("");
+    e.preventDefault();
+    setLoading(true);
+    setError("");
 
-  try {
-    const res = await signIn("credentials", {
-      email,
-      password,
-      redirect: false, // IMPORTANT
-    });
+    try {
+      const res = await signIn("credentials", {
+        email,
+        password,
+        redirect: false, // IMPORTANT
+      });
 
-    if (res?.error) {
-      setError(res.error);
-      return;
+      if (res?.error) {
+        setError(res.error);
+        return;
+      }
+
+      // success → redirect
+      router.push("/");
+
+    } catch (err) {
+      setError("Something went wrong");
+    } finally {
+      setLoading(false);
     }
-
-    // success → redirect
-    router.push("/dashboard");
-
-  } catch (err) {
-    setError("Something went wrong");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <div className="min-h-screen flex w-full pt-17">
@@ -52,7 +52,7 @@ const router = useRouter();
               <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center relative shadow-sm">
                 <div className="w-4 h-4 bg-[#81b441] rounded-full"></div>
               </div>
-              Royalfinity 
+              Royalfinity
               <span className="text-gray-500 font-normal">Technology</span>
             </Link>
 
