@@ -14,23 +14,44 @@ export const authOptions: NextAuthOptions = {
       },
 
       async authorize(credentials) {
-        // 🔥 Safety check
+        // 🔥 Validate input
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Missing email or password");
         }
 
         try {
           const client = await clientPromise;
-          const db = client.db();
 
-          const user = await db.collection("users").findOne({
+          // =========================
+          // 🔴 ADMIN DATABASE CHECK
+          // =========================
+          const adminDb = client.db("myproject");
+
+          let user = await adminDb.collection("users").findOne({
             email: credentials.email,
           });
 
+          let role: "admin" | "customer" = "admin";
+
+          // =========================
+          // 🟢 CUSTOMER DATABASE CHECK
+          // =========================
+          if (!user) {
+            const userDb = client.db("project");
+
+            user = await userDb.collection("users").findOne({
+              email: credentials.email,
+            });
+
+            role = "customer";
+          }
+
+          // ❌ No user found
           if (!user) {
             throw new Error("User not found");
           }
 
+          // 🔐 Password check
           const isValid = await bcrypt.compare(
             credentials.password,
             user.password
@@ -40,11 +61,12 @@ export const authOptions: NextAuthOptions = {
             throw new Error("Invalid password");
           }
 
+          // ✅ Return user
           return {
             id: user._id.toString(),
             name: user.name,
             email: user.email,
-            role: user.role,
+            role: role,
           };
         } catch (error) {
           console.error("AUTH ERROR:", error);
@@ -54,10 +76,16 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
 
+  // =========================
+  // 🔐 SESSION CONFIG
+  // =========================
   session: {
     strategy: "jwt",
   },
 
+  // =========================
+  // 🔁 CALLBACKS
+  // =========================
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
@@ -65,6 +93,7 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
+
     async session({ session, token }) {
       if (session?.user) {
         (session.user as any).role = token.role;
@@ -73,6 +102,9 @@ export const authOptions: NextAuthOptions = {
     },
   },
 
+  // =========================
+  // 📄 CUSTOM PAGES
+  // =========================
   pages: {
     signIn: "/login",
   },

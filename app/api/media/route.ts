@@ -6,8 +6,9 @@ import { ObjectId } from "mongodb";
 interface MediaItem {
   _id: ObjectId;
   title: string;
-  description: string;
+  description: string; // ✅ NEW
   url: string;
+  editableUrl: string; // ✅ NEW
   type: "image" | "video";
   category: string;
   subCategory: string;

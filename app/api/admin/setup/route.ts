@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 export async function POST(req: Request) {
   try {
     const client = await clientPromise;
-    const db = client.db();
+    const db = client.db("myproject");
 
     // Ensure no admin exists
     const adminCount = await db.collection("users").countDocuments({ role: "admin" });
