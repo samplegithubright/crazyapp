@@ -6,6 +6,7 @@ import { signOut } from "next-auth/react";
 
 const menuItems = [
   { name: "Dashboard", key: "dashboard" },
+  {name:"Users",key:"users"},
   { name: "Video", key: "video" },
   { name: "Graphics", key: "graphics" },
   { name: "Motion Graphic", key: "motion-graphic" },
@@ -16,7 +17,7 @@ const menuItems = [
 export default function AdminDashboard() {
   const [activeMenu, setActiveMenu] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
+const [users, setUsers] = useState<any[]>([]);
   const [media, setMedia] = useState<any[]>([]);
   const [subscribers, setSubscribers] = useState<any[]>([]);
 
@@ -25,7 +26,11 @@ export default function AdminDashboard() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [subCategory, setSubCategory] = useState("");
-
+const fetchUsers = async () => {
+  const res = await fetch("/api/admin/users");
+  const data = await res.json();
+  setUsers(data);
+};
   // FETCH MEDIA
   const fetchMedia = async (category: string) => {
     let url = "/api/media";
@@ -43,14 +48,15 @@ export default function AdminDashboard() {
     setSubscribers(data);
   };
 
-  useEffect(() => {
-    if (activeMenu === "newsletter") {
-      fetchSubscribers();
-    } else {
-      fetchMedia(activeMenu);
-    }
-  }, [activeMenu]);
-
+ useEffect(() => {
+  if (activeMenu === "newsletter") {
+    fetchSubscribers();
+  } else if (activeMenu === "users") {
+    fetchUsers(); // 👈 load users
+  } else {
+    fetchMedia(activeMenu);
+  }
+}, [activeMenu]);
   // UPLOAD
   const uploadFile = async () => {
     if (!file || !title || !subCategory) {
@@ -109,7 +115,18 @@ export default function AdminDashboard() {
 
     setSubscribers((prev) => prev.filter((sub) => sub._id !== id));
   };
+const deleteUser = async (id: string, role: string) => {
+  if (!confirm("Delete this user?")) return;
 
+  const res = await fetch(`/api/admin/users/${id}?role=${role}`, {
+    method: "DELETE",
+  });
+
+  if (!res.ok) return alert("Delete failed");
+
+  // remove from UI
+  setUsers((prev) => prev.filter((u) => u._id !== id));
+};
   return (
     <div className="min-h-screen bg-linear-to-br from-indigo-200 via-purple-100 to-pink-200">
 
@@ -168,7 +185,9 @@ export default function AdminDashboard() {
   <h1 className="text-2xl font-bold mb-6 capitalize">{activeMenu}</h1>
 
   {/* UPLOAD */}
-  {activeMenu !== "dashboard" && activeMenu !== "newsletter" && (
+  {activeMenu !== "dashboard" &&
+ activeMenu !== "newsletter" &&
+ activeMenu !== "users" &&  (
     <div className="bg-white/30 backdrop-blur-xl p-6 rounded-2xl mb-6 shadow-lg space-y-4">
 
       {/* TITLE */}
@@ -326,9 +345,62 @@ export default function AdminDashboard() {
               )}
             </div>
           )}
+{activeMenu === "users" && (
+  <div className="bg-white/30 p-4 rounded-xl">
 
+    <h2 className="text-lg font-semibold mb-4">
+      All Users ({users.length})
+    </h2>
+
+    {users.length === 0 ? (
+      <p>No users found</p>
+    ) : (
+      <div className="space-y-3">
+
+       {users.map((user) => (
+  <div
+    key={user._id}
+    className="flex justify-between items-center bg-white/40 p-3 rounded-lg"
+  >
+
+    {/* LEFT */}
+    <div>
+      <p className="font-medium text-sm">{user.email}</p>
+
+      <p className="text-xs text-gray-500">
+        👤 Role: <span className="font-semibold">{user.role}</span>
+      </p>
+
+      
+    </div>
+
+    {/* RIGHT */}
+    <div className="flex flex-col items-end gap-2">
+
+     
+
+      {/* ❌ DELETE BUTTON */}
+      <button
+        onClick={() => deleteUser(user._id, user.role)}
+        className="px-3 py-1 text-xs font-medium text-red-500
+                   bg-white/40 border border-red-200 rounded-full
+                   hover:bg-red-500 hover:text-white
+                   transition-all"
+      >
+        🗑 Delete
+      </button>
+
+    </div>
+
+  </div>
+))}
+
+      </div>
+    )}
+  </div>
+)}
           {/* MEDIA GRID */}
-          {activeMenu !== "newsletter" && (
+          {activeMenu !== "newsletter" && activeMenu !== "users" &&  (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {media.map((item) => (
                 <div key={item._id} className="bg-white/30 p-3 rounded-xl">

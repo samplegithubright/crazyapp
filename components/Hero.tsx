@@ -17,8 +17,9 @@ export default function Hero() {
           <select className="bg-transparent border-none text-gray-700 font-medium px-4 py-3 outline-none border-r border-gray-200 hidden md:block w-48 appearance-none cursor-pointer text-sm">
             <option>All Items</option>
             <option>Stock Video</option>
-            <option>Video Templates</option>
-            <option>Music</option>
+            <option>Video</option>
+            <option>Graphics</option>
+            <option>Motion-graphics</option>
           </select>
           <div className="flex-1 flex items-center px-4">
             <input 
