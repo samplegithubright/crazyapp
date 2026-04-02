@@ -4,9 +4,10 @@ import { ObjectId } from "mongodb";
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await params;
     const client = await clientPromise;
 
     const { searchParams } = new URL(req.url);
@@ -16,7 +17,7 @@ export async function DELETE(
     const db = client.db(dbName);
 
     await db.collection("users").deleteOne({
-      _id: new ObjectId(params.id),
+      _id: new ObjectId(resolvedParams.id),
     });
 
     return NextResponse.json({ success: true });

@@ -24,7 +24,9 @@ const filters = [
 
 export default function VideoTemplates() {
   const { data: session } = useSession();
+
   const isLoggedIn = !!session;
+  const isSubscribed = session?.user?.isSubscribed; // ✅ NEW
 
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -43,7 +45,32 @@ export default function VideoTemplates() {
       .catch(() => setLoading(false));
   }, []);
 
-  const handleDownload = async (url: string, title: string) => {
+  // ✅ MAIN FLOW HANDLER
+  const handleProtectedClick = (e: any) => {
+    e.preventDefault();
+
+    const currentPage = window.location.pathname;
+
+    if (!isLoggedIn) {
+      window.location.href = `/login?redirect=/pricing?redirect=${currentPage}`;
+    } else if (!isSubscribed) {
+      window.location.href = `/pricing?redirect=${currentPage}`;
+    }
+  };
+
+  // ✅ DOWNLOAD PROTECTION
+  const handleDownload = async (
+    e: any,
+    url: string,
+    title: string
+  ) => {
+    e.preventDefault();
+
+    if (!isSubscribed) {
+      handleProtectedClick(e);
+      return;
+    }
+
     try {
       const res = await fetch(url);
       const blob = await res.blob();
@@ -56,7 +83,7 @@ export default function VideoTemplates() {
       link.click();
 
       URL.revokeObjectURL(blobUrl);
-    } catch (err) {
+    } catch {
       alert("Download failed");
     }
   };
@@ -159,14 +186,12 @@ export default function VideoTemplates() {
                 key={item._id}
                 className="group bg-white rounded-xl overflow-hidden shadow hover:shadow-xl transition"
               >
-                {/* CLICKABLE IMAGE → PRICING PAGE */}
-                <Link
-                  href={{
-                    pathname: "/pricing",
-                    query: { category: item.subCategory || "graphics" },
-                  }}
-                >
-                  <div className="relative cursor-pointer">
+                {/* IMAGE */}
+                <Link href="#">
+                  <div
+                    onClick={handleProtectedClick}
+                    className="relative cursor-pointer"
+                  >
                     <img
                       src={item.url}
                       alt={item.title}
@@ -176,47 +201,48 @@ export default function VideoTemplates() {
                     {/* BUTTONS */}
                     <div className="absolute top-3 right-3 flex gap-2 z-10">
 
-                      {!isLoggedIn ? (
-                        <Link href="/login">
-                          <div className="p-2 rounded-full bg-black/60 backdrop-blur-md border border-white/20 shadow">
+                      {/* DOWNLOAD */}
+                      {!isSubscribed ? (
+                        <button onClick={handleProtectedClick}>
+                          <div className="p-2 rounded-full bg-black/60 border shadow">
                             <Lock size={14} className="text-white" />
                           </div>
-                        </Link>
+                        </button>
                       ) : (
                         <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleDownload(item.url, item.title);
-                          }}
-                          className="p-2 rounded-full bg-white/80 backdrop-blur-md border shadow"
+                          onClick={(e) =>
+                            handleDownload(e, item.url, item.title)
+                          }
+                          className="p-2 rounded-full bg-white/80 border shadow"
                         >
                           <Download size={14} />
                         </button>
                       )}
 
-                      {!isLoggedIn ? (
-                        <Link href="/login">
-                          <div className="p-2 rounded-full bg-black/60 backdrop-blur-md border border-white/20 shadow">
+                      {/* EDITABLE */}
+                      {!isSubscribed ? (
+                        <button onClick={handleProtectedClick}>
+                          <div className="p-2 rounded-full bg-black/60 border shadow">
                             <Lock size={14} className="text-white" />
                           </div>
-                        </Link>
+                        </button>
                       ) : (
                         <button
-                          onClick={(e) => {
-                            e.preventDefault();
+                          onClick={(e) =>
                             handleDownload(
+                              e,
                               item.editableUrl,
                               item.title + "-editable"
-                            );
-                          }}
-                          className="p-2 rounded-full bg-purple-600/80 backdrop-blur-md border shadow"
+                            )
+                          }
+                          className="p-2 rounded-full bg-purple-600/80 border shadow"
                         >
                           <FilePen size={14} className="text-white" />
                         </button>
                       )}
                     </div>
 
-                    {/* CATEGORY TAG */}
+                    {/* CATEGORY */}
                     <div className="absolute bottom-3 left-3 bg-white/80 text-xs px-2 py-1 rounded shadow">
                       {item.subCategory}
                     </div>
@@ -229,7 +255,7 @@ export default function VideoTemplates() {
                     {item.title}
                   </h3>
 
-                  <p className="text-xs text-gray-600 leading-relaxed line-clamp-3">
+                  <p className="text-xs text-gray-600 line-clamp-3">
                     {item.description || "No description available"}
                   </p>
                 </div>

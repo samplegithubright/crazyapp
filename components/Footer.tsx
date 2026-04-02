@@ -4,12 +4,12 @@ import Link from "next/link";
 import { Facebook, Twitter, Instagram, Linkedin, Send } from "lucide-react";
 
 export default function Footer() {
-    const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("");
 
   const handleSubscribe = async () => {
     if (!email) return alert("Enter email");
 
-    const res = await fetch("/api/subscribe", {
+    const res = await fetch("/api/newsletter", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -24,10 +24,11 @@ export default function Footer() {
       setEmail("");
     } else {
       alert(data.error);
-    }};
+    }
+  };
   return (
     <footer className="bg-[#0a1f44] text-white ">
-      
+
       {/* TOP SECTION */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 grid gap-10 
         grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
@@ -60,20 +61,20 @@ export default function Footer() {
           <h3 className="text-lg font-semibold mb-4 text-[#d7ac38]">
             Company
           </h3>
-        <ul className="space-y-2 text-sm text-gray-300">
-  <li>
-    <Link href="/about" className="hover:text-white">About</Link>
-  </li>
-  <li>
-    <Link href="/careers" className="hover:text-white">Careers</Link>
-  </li>
-  <li>
-    <Link href="/blog" className="hover:text-white">Blog</Link>
-  </li>
-  <li>
-    <Link href="/pricing" className="hover:text-white">Pricing</Link>
-  </li>
-</ul>
+          <ul className="space-y-2 text-sm text-gray-300">
+            <li>
+              <Link href="/about" className="hover:text-white">About</Link>
+            </li>
+            <li>
+              <Link href="/careers" className="hover:text-white">Careers</Link>
+            </li>
+            <li>
+              <Link href="/blog" className="hover:text-white">Blog</Link>
+            </li>
+            <li>
+              <Link href="/pricing" className="hover:text-white">Pricing</Link>
+            </li>
+          </ul>
         </div>
 
         {/* RESOURCES */}
@@ -100,19 +101,19 @@ export default function Footer() {
 
           <div className="flex items-center bg-white/10 rounded-lg overflow-hidden">
             <input
-  type="email"
-  placeholder="Your email"
-  value={email}
-  onChange={(e) => setEmail(e.target.value)}
-  className="bg-transparent px-3 py-2 w-full text-sm outline-none"
-/>
+              type="email"
+              placeholder="Your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="bg-transparent px-3 py-2 w-full text-sm outline-none"
+            />
 
-<button
-  onClick={handleSubscribe}
-  className="bg-[#d7ac38] p-2 hover:bg-yellow-500 transition"
->
-  <Send size={16} />
-</button>
+            <button
+              onClick={handleSubscribe}
+              className="bg-[#d7ac38] p-2 hover:bg-yellow-500 transition"
+            >
+              <Send size={16} />
+            </button>
           </div>
         </div>
       </div>
