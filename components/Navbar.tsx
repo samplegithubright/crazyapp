@@ -53,13 +53,13 @@ export default function Header() {
   ];
 
   return (
-    <header className="w-full bg-white/80 backdrop-blur-md text-gray-800 fixed top-0 left-0 z-50 shadow-sm border-b border-gray-200">
+    <header className="w-full bg-[#0b0f19]/80 backdrop-blur-md text-white fixed top-0 left-0 z-50 border-b border-white/10">
 
       {/* TOP BAR */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
 
         {/* LOGO */}
-        <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-[#d7ac38] tracking-wide">
+        <h1 className="text-lg sm:text-xl lg:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500 tracking-wide">
           <Link href="/" className="hover:opacity-80 transition">
             MyBrand
           </Link>
@@ -73,14 +73,14 @@ export default function Header() {
               {item.link ? (
                 <Link
                   href={item.link}
-                  className="text-xs lg:text-sm font-medium text-gray-700 hover:text-[#d7ac38] transition"
+                  className="text-xs lg:text-sm font-medium text-gray-300 hover:text-purple-400 transition"
                 >
                   {item.name}
                 </Link>
               ) : (
                 <button
                   onClick={() => toggleMenu(item.name)}
-                  className="flex items-center gap-1 text-xs lg:text-sm font-medium text-gray-700 hover:text-[#d7ac38] transition"
+                  className="flex items-center gap-1 text-xs lg:text-sm font-medium text-gray-300 hover:text-purple-400 transition"
                 >
                   {item.name}
                   <ChevronDown size={14} className="opacity-70" />
@@ -97,14 +97,14 @@ export default function Header() {
             <>
               <Link
                 href="/login"
-                className="px-4 py-1.5 rounded-lg border border-gray-300 text-gray-700 hover:border-[#d7ac38] hover:text-[#d7ac38] transition text-sm"
+                className="px-4 py-1.5 rounded-lg border border-white/20 text-gray-300 hover:border-purple-400 hover:text-white transition text-sm bg-white/5"
               >
                 Login
               </Link>
 
               <Link
                 href="/register"
-                className="px-4 py-1.5 bg-[#d7ac38] text-white rounded-lg hover:opacity-90 shadow-sm text-sm"
+                className="px-4 py-1.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:from-purple-500 hover:to-indigo-500 shadow-[0_0_15px_rgba(147,51,234,0.3)] transition text-sm font-medium"
               >
                 Sign Up
               </Link>
@@ -112,7 +112,7 @@ export default function Header() {
           ) : (
             <button
               onClick={() => signOut({ callbackUrl: "/" })}
-              className="px-4 py-1.5 bg-red-500 text-white rounded-lg hover:opacity-90 shadow-sm text-sm"
+              className="px-4 py-1.5 bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg hover:bg-red-500/30 transition text-sm"
             >
               Logout
             </button>
@@ -120,14 +120,14 @@ export default function Header() {
         </div>
 
         {/* MOBILE BUTTON */}
-        <button className="md:hidden" onClick={() => setMobileOpen(!mobileOpen)}>
+        <button className="md:hidden text-gray-300 hover:text-white transition" onClick={() => setMobileOpen(!mobileOpen)}>
           {mobileOpen ? <X size={26} /> : <Menu size={26} />}
         </button>
       </div>
 
       {/* DESKTOP MEGA MENU */}
       {activeMenu && (
-        <div className="hidden md:block absolute top-full left-0 w-full bg-white/95 backdrop-blur-xl shadow-xl border-t border-gray-200">
+        <div className="hidden md:block absolute top-full left-0 w-full bg-[#0b0f19]/95 backdrop-blur-xl shadow-[0_20px_40px_rgba(0,0,0,0.5)] border-t border-white/10">
           <div className="max-w-7xl mx-auto px-10 py-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
 
             {menuItems
@@ -136,15 +136,15 @@ export default function Header() {
                 <Link
                   key={i}
                   href={sub.link}
-                  className="group relative p-4 rounded-2xl bg-white hover:bg-gray-50 border border-gray-100 hover:border-[#d7ac38] shadow-sm hover:shadow-lg transition-all duration-300"
+                  className="group relative p-4 rounded-xl bg-[#131927] hover:bg-[#1C2333] border border-white/5 hover:border-purple-500/50 shadow-sm hover:shadow-[0_0_15px_rgba(168,85,247,0.2)] transition-all duration-300"
                 >
-                  <div className="absolute top-0 left-0 w-0 h-0.5 bg-[#d7ac38] group-hover:w-full transition-all duration-300 rounded-t-2xl"></div>
+                  <div className="absolute top-0 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 group-hover:w-full transition-all duration-300 rounded-t-xl"></div>
 
                   <div className="flex flex-col gap-1">
-                    <span className="text-sm font-semibold text-gray-800 group-hover:text-[#0a1f44]">
+                    <span className="text-sm font-semibold text-gray-200 group-hover:text-white transition-colors">
                       {sub.name}
                     </span>
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-gray-500 group-hover:text-gray-400 transition-colors">
                       Explore {sub.name}
                     </span>
                   </div>
@@ -157,16 +157,16 @@ export default function Header() {
 
       {/* MOBILE MENU */}
       <div
-        className={`md:hidden transition-all duration-300 overflow-hidden ${mobileOpen ? "max-h-150 py-4" : "max-h-0"
-          } bg-white border-t border-gray-200 px-4`}
+        className={`md:hidden transition-all duration-300 overflow-hidden ${mobileOpen ? "max-h-[500px] py-4" : "max-h-0"
+          } bg-[#0b0f19] border-t border-white/10 px-4`}
       >
         {menuItems.map((item, index) => (
-          <div key={index} className="border-b border-gray-200">
+          <div key={index} className="border-b border-white/5">
 
             {item.link ? (
               <Link
                 href={item.link}
-                className="block py-3 text-sm text-gray-700"
+                className="block py-3 text-sm text-gray-300 hover:text-purple-400 transition"
               >
                 {item.name}
               </Link>
@@ -174,7 +174,7 @@ export default function Header() {
               <>
                 <button
                   onClick={() => toggleMenu(item.name)}
-                  className="w-full flex justify-between items-center py-3 text-sm text-gray-700"
+                  className="w-full flex justify-between items-center py-3 text-sm text-gray-300 hover:text-purple-400 transition"
                 >
                   {item.name}
                   <ChevronDown
@@ -192,7 +192,7 @@ export default function Header() {
                     <Link
                       key={i}
                       href={sub.link}
-                      className="block pl-4 py-2 text-sm text-gray-500 hover:text-[#d7ac38]"
+                      className="block pl-4 py-2 text-sm text-gray-500 hover:text-purple-400 transition-colors"
                     >
                       {sub.name}
                     </Link>
@@ -208,17 +208,17 @@ export default function Header() {
         <div className="mt-4 flex flex-col gap-3">
           {!session ? (
             <>
-              <Link href="/login" className="text-center px-4 py-2 border rounded-md">
+              <Link href="/login" className="text-center px-4 py-2 bg-white/5 border border-white/10 text-gray-300 hover:border-purple-400 hover:text-white transition rounded-md font-medium">
                 Login
               </Link>
-              <Link href="/register" className="text-center px-4 py-2 bg-[#d7ac38] text-white rounded-md">
+              <Link href="/register" className="text-center px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-md font-medium hover:from-purple-500 hover:to-indigo-500 transition shadow-[0_0_15px_rgba(147,51,234,0.3)]">
                 Sign Up
               </Link>
             </>
           ) : (
             <button
               onClick={() => signOut({ callbackUrl: "/" })}
-              className="text-center px-4 py-2 bg-red-500 text-white rounded-md"
+              className="text-center px-4 py-2 bg-red-500/20 text-red-400 rounded-md border border-red-500/30"
             >
               Logout
             </button>

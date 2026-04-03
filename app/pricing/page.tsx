@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { Check } from "lucide-react";
+import { Check, Sparkles } from "lucide-react";
 
 const plans = [
   {
@@ -73,101 +73,114 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#f8fafc] via-[#f1f5f9] to-[#e2e8f0] px-4 py-16">
+    <div className="bg-[#0b0f19] min-h-screen px-4 sm:px-6 lg:px-12 py-10 pt-32 relative overflow-hidden flex flex-col justify-center">
 
-    {/* HEADER */}
-    <div className="text-center mb-14">
-      <h1 className="text-4xl sm:text-5xl font-bold text-gray-800 mb-3">
-        {category || "Graphics"} Plans
-      </h1>
-      <p className="text-gray-500 text-sm sm:text-base">
-        Choose the perfect plan for your needs
-      </p>
-    </div>
+      {/* AMBIENT BACKGROUND GLOW */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[150px] pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none"></div>
 
-    {/* CARDS */}
-    <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+      {/* HEADER */}
+      <div className="text-center mb-16 relative z-10 w-full max-w-2xl mx-auto">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6 backdrop-blur-sm self-center justify-center mx-auto">
+          <Sparkles className="w-4 h-4 text-purple-400" />
+          <span className="text-xs font-medium text-gray-300">Unlock Unlimited Access</span>
+        </div>
 
-      {plans.map((plan, i) => (
-        <div
-          key={i}
-          className={`
-            relative group rounded-2xl p-px
-            bg-linear-to-br from-purple-500/30 to-indigo-500/30
-            hover:from-purple-500 hover:to-indigo-500
-            transition duration-500
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+          {category || "Generate"} Without Limits
+        </h1>
+        <p className="text-gray-400 text-base sm:text-lg font-light leading-relaxed">
+          Choose a plan to elevate your creative pipeline. Unparalleled speed, unrestricted assets, and absolute creative freedom.
+        </p>
+      </div>
+
+      {/* CARDS */}
+      <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto relative z-10">
+
+        {plans.map((plan, i) => (
+          <div
+            key={i}
+            className={`
+            relative group rounded-3xl p-[1px]
+            bg-white/5
+            hover:bg-gradient-to-r hover:from-purple-500 hover:to-indigo-500
+            transition-all duration-500 h-full
+            ${plan.name === 'Pro' ? 'bg-gradient-to-r from-purple-500/50 to-pink-500/50 shadow-[0_0_30px_rgba(168,85,247,0.2)]' : ''}
           `}
-        >
-          {/* INNER CARD */}
-          <div className="
-            rounded-2xl backdrop-blur-xl bg-white/70
-            border border-white/40 shadow-xl
-            p-6 flex flex-col justify-between
-            h-full transition
-            group-hover:bg-white/90
+          >
+            {/* INNER CARD */}
+            <div className="
+            rounded-[23px] backdrop-blur-xl bg-[#131927]
+            h-full flex flex-col p-8 md:p-10 transition-all duration-500
           ">
 
-            {/* TOP */}
-            <div>
-              <h2 className="text-xl font-semibold text-gray-800 mb-1">
-                {plan.name}
-              </h2>
+              {/* TOP */}
+              <div className="flex-1">
+                <h2 className="text-lg font-semibold text-purple-400 mb-2 uppercase tracking-wide">
+                  {plan.name}
+                </h2>
 
-              <p className="text-4xl font-bold text-gray-900 mb-4">
-                {plan.label}
-                <span className="text-sm font-normal text-gray-500">
-                  {" "} /month
-                </span>
-              </p>
+                <p className="text-5xl font-bold text-white mb-6">
+                  {plan.label}
+                  <span className="text-base font-normal text-gray-500">
+                    {" "} /mo
+                  </span>
+                </p>
 
-              {/* FEATURES */}
-              <ul className="space-y-3 mb-6">
-                {[
-                  "Unlimited access",
-                  "High-quality downloads",
-                  "Premium support",
-                ].map((f, idx) => (
-                  <li
-                    key={idx}
-                    className="flex items-center gap-2 text-sm text-gray-600"
-                  >
-                    <Check size={16} className="text-purple-600" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-            </div>
+                <div className="h-[1px] w-full bg-white/10 mb-8"></div>
 
-            {/* BUTTON */}
-            <button
-              onClick={() => handlePayment(plan.price)}
-              className="
-                w-full py-2.5 rounded-xl font-medium text-sm
-                bg-linear-to-r from-purple-600 to-indigo-600
-                text-white shadow-md
-                hover:scale-[1.03] hover:shadow-lg
-                active:scale-[0.98]
-                transition
-              "
-            >
-              Subscribe
-            </button>
-
-            {/* POPULAR TAG */}
-            {plan.name === "Pro" && (
-              <div className="absolute top-4 right-4 text-xs px-3 py-1 rounded-full bg-purple-600 text-white shadow">
-                Popular
+                {/* FEATURES */}
+                <ul className="space-y-4 mb-8">
+                  {[
+                    "Unlimited generations",
+                    "High-resolution exports up to 4K",
+                    "Commercial usage rights",
+                    "Priority server rendering",
+                  ].map((f, idx) => (
+                    <li
+                      key={idx}
+                      className="flex items-start gap-3 text-sm text-gray-300"
+                    >
+                      <Check size={18} className="text-purple-400 mt-0.5" />
+                      <span className="font-light leading-snug">{f}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            )}
-          </div>
-        </div>
-      ))}
-    </div>
 
-    {/* FOOTER */}
-    <p className="text-center text-gray-400 mt-14 text-sm">
-      Secure payments • Cancel anytime • Instant access
-    </p>
-  </div>
+              {/* BUTTON */}
+              <button
+                onClick={() => handlePayment(plan.price)}
+                className={`
+                w-full py-4 rounded-xl font-bold text-sm text-center transition-all duration-300
+                ${plan.name === 'Pro'
+                    ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-[0_0_20px_rgba(147,51,234,0.4)] hover:from-purple-500 hover:to-indigo-500'
+                    : 'bg-white/5 border border-white/10 text-white hover:bg-white/10'
+                  }
+              `}
+              >
+                Get {plan.name}
+              </button>
+
+              {/* POPULAR TAG */}
+              {plan.name === "Pro" && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs px-4 py-1.5 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold tracking-wider shadow-[0_0_15px_rgba(168,85,247,0.5)]">
+                  MOST POPULAR
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* FOOTER TEXT */}
+      <div className="text-center mt-16 relative z-10 w-full flex flex-col sm:flex-row items-center justify-center gap-4 text-sm font-light text-gray-500">
+        <span className="flex items-center gap-2"> Secure payments via Razorpay</span>
+        <span className="hidden sm:inline-block h-1 w-1 rounded-full bg-gray-500"></span>
+        <span>Cancel anytime</span>
+        <span className="hidden sm:inline-block h-1 w-1 rounded-full bg-gray-500"></span>
+        <span>Instant account activation</span>
+      </div>
+    </div>
   );
 }

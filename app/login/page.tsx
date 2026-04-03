@@ -2,15 +2,17 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Mail, Lock, Loader2 } from "lucide-react";
+import { Mail, Lock, Loader2, Sparkles } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
@@ -39,34 +41,38 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex w-full pt-17">
+    <div className="min-h-screen flex w-full bg-[#0b0f19] text-white">
       {/* LEFT SIDE */}
-      <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-20 xl:px-24 bg-[#f5f5f5]">
-        <div className="mx-auto w-full max-w-sm lg:w-96 bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
+      <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-20 xl:px-24 relative overflow-hidden border-r border-white/5">
+        
+        {/* Glow */}
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div className="mx-auto w-full max-w-sm lg:w-96 bg-[#131927]/80 backdrop-blur-xl p-8 sm:p-10 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 relative z-10">
+          
+          <div className="absolute -top-[1px] left-10 right-10 h-[1px] bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-50"></div>
+
           {/* LOGO */}
           <div>
             <Link
               href="/"
-              className="flex items-center gap-2 text-2xl font-bold tracking-tight text-gray-900 justify-center"
+              className="flex items-center gap-2 text-2xl font-bold tracking-tight text-white justify-center"
             >
-              <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center relative shadow-sm">
-                <div className="w-4 h-4 bg-[#81b441] rounded-full"></div>
-              </div>
-              Royalfinity
-              <span className="text-gray-500 font-normal">Technology</span>
+              <Sparkles className="w-6 h-6 text-purple-400" />
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">Royalfinity</span>
             </Link>
 
-            <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900 text-center">
-              Sign in to your account
+            <h2 className="mt-8 text-3xl font-bold tracking-tight text-white text-center">
+              Welcome back
             </h2>
 
-            <p className="mt-2 text-sm text-gray-500 text-center">
-              Not a member?{" "}
+            <p className="mt-3 text-sm text-gray-400 text-center font-light">
+              Don't have an account?{" "}
               <Link
                 href="/register"
-                className="font-semibold text-blue-600 hover:text-blue-500"
+                className="font-medium text-purple-400 hover:text-purple-300 transition-colors"
               >
-                Start a free trial
+                Start for free
               </Link>
             </p>
           </div>
@@ -75,24 +81,24 @@ export default function LoginPage() {
           <div className="mt-10">
             <form onSubmit={handleSubmit} className="space-y-6">
               {error && (
-                <div className="bg-red-50 text-red-600 text-sm p-3 rounded-md border border-red-100 text-center">
+                <div className="bg-red-500/10 text-red-400 text-sm p-3 rounded-xl border border-red-500/20 text-center font-medium">
                   {error}
                 </div>
               )}
 
               {/* EMAIL */}
               <div>
-                <label className="block text-sm font-medium text-gray-900">
+                <label className="block text-sm font-medium text-gray-300 mb-2">
                   Email address
                 </label>
-                <div className="mt-2 relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <div className="relative group">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500 group-focus-within:text-purple-400 transition-colors" />
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="block w-full rounded-md py-2.5 pl-10 pr-3 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-600 outline-none"
+                    className="block w-full rounded-xl py-3 pl-12 pr-4 bg-white/5 border border-white/10 text-white shadow-sm placeholder:text-gray-600 focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 outline-none transition-all"
                     placeholder="you@example.com"
                   />
                 </div>
@@ -100,25 +106,25 @@ export default function LoginPage() {
 
               {/* PASSWORD */}
               <div>
-                <label className="block text-sm font-medium text-gray-900">
+                <label className="block text-sm font-medium text-gray-300 mb-2">
                   Password
                 </label>
-                <div className="mt-2 relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <div className="relative group">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500 group-focus-within:text-purple-400 transition-colors" />
                   <input
                     type="password"
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="block w-full rounded-md py-2.5 pl-10 pr-3 text-gray-900 shadow-sm ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-600 outline-none"
+                    className="block w-full rounded-xl py-3 pl-12 pr-4 bg-white/5 border border-white/10 text-white shadow-sm placeholder:text-gray-600 focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500/50 outline-none transition-all"
                     placeholder="••••••••"
                   />
                 </div>
 
-                <div className="flex justify-end mt-2">
+                <div className="flex justify-end mt-3">
                   <a
                     href="#"
-                    className="text-sm font-semibold text-blue-600 hover:text-blue-500"
+                    className="text-xs font-medium text-gray-400 hover:text-white transition-colors"
                   >
                     Forgot password?
                   </a>
@@ -129,12 +135,12 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex w-full justify-center items-center rounded-md bg-[#0084ff] hover:bg-[#006bce] px-3 py-2.5 text-sm font-semibold text-white shadow-sm transition disabled:opacity-70"
+                className="flex w-full justify-center items-center rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 py-3.5 text-sm font-bold text-white shadow-[0_0_20px_rgba(147,51,234,0.3)] hover:shadow-[0_0_25px_rgba(147,51,234,0.5)] transition-all disabled:opacity-70 mt-4"
               >
                 {loading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
-                  "Sign in"
+                  "Sign in to Dashboard"
                 )}
               </button>
             </form>
@@ -143,28 +149,38 @@ export default function LoginPage() {
       </div>
 
       {/* RIGHT SIDE */}
-      <div className="hidden lg:flex flex-1 relative bg-gray-900 overflow-hidden items-center justify-center">
-        <div className="absolute inset-0 opacity-40 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-600 via-gray-900 to-black"></div>
+      <div className="hidden lg:flex flex-1 relative bg-[#0b0f19] items-center justify-center p-12 overflow-hidden">
+        
+        {/* Abstract Background for right side */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#131927] to-[#0b0f19] z-0"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(ellipse_at_center,_rgba(168,85,247,0.15)_0%,_transparent_60%)] z-0"></div>
 
-        <div className="relative z-10 p-12 text-center">
-          <h2 className="text-4xl font-bold text-white mb-6 leading-tight">
-            Millions of creative assets <br /> Unlimited downloads
+        <div className="relative z-10 text-center max-w-lg mx-auto">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-sm">
+            <span className="text-xs font-medium text-gray-300 tracking-wider uppercase">Enterprise Grade Infrastructure</span>
+          </div>
+          
+          <h2 className="text-5xl font-bold text-white mb-8 leading-tight">
+            Infinite content generation. <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-indigo-400">Zero limits.</span>
           </h2>
 
-          <p className="text-xl text-gray-300 mb-8 max-w-lg mx-auto">
-            Graphic templates, photos, fonts, courses, and much more. Bring
-            your creative projects to life.
+          <p className="text-lg text-gray-400 font-light mb-12">
+            Accelerate your creative workflow with our industry-leading models, exclusive templates, and robust asset library.
           </p>
 
-          <div className="flex justify-center gap-4">
-            <div className="w-16 h-16 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/20">
-              🎨
+          <div className="grid grid-cols-3 gap-6">
+            <div className="bg-[#131927]/80 backdrop-blur border border-white/10 rounded-2xl p-6 shadow-xl flex flex-col items-center justify-center gap-3 hover:border-purple-500/30 transition-colors">
+              <span className="text-3xl">🎨</span>
+              <span className="text-xs font-medium text-gray-300">Graphics</span>
             </div>
-            <div className="w-16 h-16 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/20 -translate-y-4">
-              📸
+            <div className="bg-[#131927]/80 backdrop-blur border border-white/10 rounded-2xl p-6 shadow-xl flex flex-col items-center justify-center gap-3 hover:border-purple-500/30 transition-colors -translate-y-4">
+              <span className="text-3xl">🎥</span>
+              <span className="text-xs font-medium text-gray-300">Video</span>
             </div>
-            <div className="w-16 h-16 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/20">
-              💻
+            <div className="bg-[#131927]/80 backdrop-blur border border-white/10 rounded-2xl p-6 shadow-xl flex flex-col items-center justify-center gap-3 hover:border-purple-500/30 transition-colors">
+              <span className="text-3xl">✨</span>
+              <span className="text-xs font-medium text-gray-300">Motion</span>
             </div>
           </div>
         </div>

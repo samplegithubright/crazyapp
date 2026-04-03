@@ -1,10 +1,19 @@
 @import "tailwindcss";
 
+@theme {
+  --color-leonardo-dark: #0b0f19;
+  --color-leonardo-light: #131927;
+}
+
 html {
   scroll-behavior: smooth;
+  background-color: #0b0f19;
+  color: #fff;
 }
 
 /* Improve touch scrolling */
 body {
   overscroll-behavior: none;
+  background-color: var(--color-leonardo-dark, #0b0f19);
+  color: white;
 }

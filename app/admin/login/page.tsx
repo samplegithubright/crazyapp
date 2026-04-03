@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
+import { Loader2, Sparkles } from "lucide-react";
 
 export default function AdminLogin() {
   const router = useRouter();
@@ -41,60 +41,67 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-gray-100">
-      {/* Background Layer */}
-      <div className="absolute inset-0 bg-linear-to-br from-blue-200 via-white to-purple-200 opacity-70" />
-      <img
-        src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f"
-        alt="bg"
-        className="absolute inset-0 w-full h-full object-cover opacity-20"
-      />
+    <div className="relative min-h-screen flex items-center justify-center bg-[#0b0f19] overflow-hidden px-4">
+      {/* Background Orbs */}
+      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[150px] pointer-events-none"></div>
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[150px] pointer-events-none"></div>
 
       {/* Card */}
-      <div className="relative z-10 w-full max-w-md bg-white/80 backdrop-blur-xl border border-white/40 rounded-2xl shadow-xl p-8">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-2">Admin Login</h2>
-        <p className="text-center text-gray-500 mb-6">Access your admin dashboard</p>
+      <div className="relative z-10 w-full max-w-md bg-[#131927]/90 backdrop-blur-xl border border-white/10 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] p-8 sm:p-10">
+        
+        <div className="absolute -top-[1px] left-10 right-10 h-[1px] bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-50"></div>
 
-        <form className="space-y-5" onSubmit={handleSubmit}>
+        <div className="flex justify-center mb-6">
+          <div className="w-12 h-12 rounded-full border border-white/10 bg-white/5 flex items-center justify-center">
+            <Sparkles className="w-6 h-6 text-purple-400" />
+          </div>
+        </div>
+
+        <h2 className="text-3xl font-bold text-center text-white mb-2 tracking-tight">Admin Portal</h2>
+        <p className="text-center text-gray-400 font-light mb-8">Access the master control system</p>
+
+        <form className="space-y-6" onSubmit={handleSubmit}>
           {error && (
-            <div className="bg-red-100 border border-red-300 text-red-600 px-4 py-3 rounded-lg text-sm">
+            <div className="bg-red-500/10 border border-red-500/30 text-red-400 px-4 py-3 rounded-xl text-sm font-medium text-center">
               {error}
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Email address</label>
+            <label className="block text-sm font-medium text-gray-300 mb-2">Email address</label>
             <input
               required
               type="email"
-              className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 shadow-sm focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-gray-500 focus:ring-1 focus:ring-purple-500/50 focus:border-purple-500/50 outline-none transition-all"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
+              placeholder="admin@example.com"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Password</label>
+            <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
             <input
               required
               type="password"
-              className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 shadow-sm focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-gray-500 focus:ring-1 focus:ring-purple-500/50 focus:border-purple-500/50 outline-none transition-all"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
+              placeholder="••••••••"
             />
           </div>
 
           <button
             type="submit"
             disabled={submitting}
-            className="w-full flex justify-center items-center gap-2 rounded-lg bg-blue-600 py-2.5 text-white font-semibold hover:bg-blue-700 transition disabled:opacity-50"
+            className="w-full flex justify-center items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 py-3.5 text-white font-bold hover:from-purple-500 hover:to-indigo-500 transition-all shadow-[0_0_20px_rgba(147,51,234,0.3)] disabled:opacity-50 mt-4"
           >
             {submitting ? (
               <>
-                <Loader2 className="animate-spin w-4 h-4" /> Signing In...
+                <Loader2 className="animate-spin w-5 h-5" /> Authenticating...
               </>
             ) : (
-              "Sign In"
+              "Access System"
             )}
           </button>
         </form>
