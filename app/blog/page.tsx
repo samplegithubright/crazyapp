@@ -118,8 +118,8 @@ export default function BlogPage() {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <Link href={`/blog/${posts[0].id}`} className="group block relative rounded-3xl overflow-hidden border border-white/10 bg-neutral-900 transition-colors hover:border-indigo-500/50">
-              <div className="flex flex-col lg:flex-row min-h-[400px]">
-                <div className={`lg:w-1/2 relative bg-gradient-to-br ${posts[0].gradient} p-8 flex items-end justify-start min-h-[250px]`}>
+              <div className="flex flex-col lg:flex-row min-h-100">
+                <div className={`lg:w-1/2 relative bg-linear-to-br ${posts[0].gradient} p-8 flex items-end justify-start min-h-[250px]`}>
                    <div className="absolute inset-0 bg-black/20 mix-blend-overlay" />
                    <div className="relative z-10 w-full h-full flex items-center justify-center">
                      <span className="text-white/40 font-bold text-4xl lg:text-7xl tracking-tighter mix-blend-overlay rotate-[-5deg]">FEATURED</span>
@@ -168,10 +168,10 @@ export default function BlogPage() {
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
               >
                 <Link href={`/blog/${post.id}`} className="group flex flex-col h-full bg-neutral-900 border border-white/5 rounded-3xl overflow-hidden hover:border-indigo-500/30 transition-all hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
-                  <div className={`h-48 relative bg-gradient-to-br ${post.gradient}`}>
+                  <div className={`h-48 relative bg-linear-to-br ${post.gradient}`}>
                     <div className="absolute inset-0 bg-black/10 mix-blend-overlay" />
                   </div>
-                  <div className="p-6 md:p-8 flex flex-col flex-grow">
+                  <div className="p-6 md:p-8 flex flex-col grow">
                     <div className="flex items-center gap-2 text-xs font-medium mb-4">
                       <span className="text-indigo-400 capitalize bg-indigo-500/10 px-2 py-1 rounded-md">{post.category}</span>
                     </div>

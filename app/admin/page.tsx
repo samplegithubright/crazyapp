@@ -13,6 +13,7 @@ const menuItems = [
   { name: "Stock Video", key: "stock-video" },
 
   { name: "Subscriptions", key: "subscriptions" },
+  { name: "Pricing", key: "pricing" },
   { name: "Newsletter", key: "newsletter" },
 ];
 
@@ -28,7 +29,11 @@ export default function AdminDashboard() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [subCategory, setSubCategory] = useState("");
-
+const [plans, setPlans] = useState<any[]>([]);
+const [planName, setPlanName] = useState("");
+const [price, setPrice] = useState("");
+const [duration, setDuration] = useState("monthly");
+const [features, setFeatures] = useState("");
   const fetchUsers = async () => {
     const res = await fetch("/api/admin/users");
     const data = await res.json();
@@ -55,23 +60,83 @@ export default function AdminDashboard() {
     const data = await res.json();
     setSubscribers(data);
   };
+  const fetchPlans = async () => {
+  const res = await fetch("/api/pricing");
+  const data = await res.json();
+  setPlans(data);
+};
+const addPlan = async () => {
+  if (!planName || !price) return alert("Fill all fields");
+
+  const res = await fetch("/api/pricing", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json", // ✅ VERY IMPORTANT
+    },
+    body: JSON.stringify({
+      name: planName,
+      price: Number(price),
+      duration,
+      features: features.split(",").map(f => f.trim()),
+    }),
+  });
+
+  if (!res.ok) {
+    alert("Failed to add plan");
+    return;
+  }
+
+  alert("Plan added ✅");
+
+  setPlanName("");
+  setPrice("");
+  setFeatures("");
+
+  fetchPlans();
+};
 
   useEffect(() => {
-    if (activeMenu === "newsletter") {
-      fetchNewsletter();
-    } else if (activeMenu === "subscriptions") {
-      fetchSubscribers();
-    } else if (activeMenu === "users") {
-      fetchUsers();
-    } else {
-      fetchMedia(activeMenu);
-    }
-  }, [activeMenu]);
+  if (activeMenu === "newsletter") {
+    fetchNewsletter();
+  } else if (activeMenu === "subscriptions") {
+    fetchSubscribers();
+  } else if (activeMenu === "users") {
+    fetchUsers();
+  } else if (activeMenu === "pricing") {
+    fetchPlans(); // ✅ ADD THIS
+  } else {
+    fetchMedia(activeMenu);
+  }
+}, [activeMenu]);
 
   const uploadFile = async () => {
     if (!file || !title || !subCategory) {
       return alert("Fill all fields");
     }
+
+
+const addPlan = async () => {
+  if (!planName || !price) return alert("Fill all fields");
+
+  await fetch("/api/pricing", {
+    method: "POST",
+    body: JSON.stringify({
+      name: planName,
+      price: Number(price),
+      duration,
+      features: features.split(",").map(f => f.trim()),
+    }),
+  });
+
+  setPlanName("");
+  setPrice("");
+  setFeatures("");
+
+  fetchPlans();
+};
+
+
+
 
     const formData = new FormData();
     formData.append("file", file);
@@ -135,7 +200,15 @@ export default function AdminDashboard() {
 
     setUsers((prev) => prev.filter((u) => u._id !== id));
   };
+const deletePlan = async (id: string) => {
+  if (!confirm("Delete this plan?")) return;
 
+  await fetch(`/api/pricing/${id}`, {
+    method: "DELETE",
+  });
+
+  fetchPlans();
+};
   return (
     <div className="min-h-screen bg-[#0b0f19] text-white relative">
       
@@ -214,7 +287,8 @@ export default function AdminDashboard() {
           {activeMenu !== "dashboard" &&
             activeMenu !== "newsletter" &&
             activeMenu !== "users" &&
-            activeMenu !== "subscriptions" && (
+            activeMenu !== "subscriptions" &&
+            activeMenu !== "pricing" && (
               <div className="bg-[#131927] border border-white/10 p-6 sm:p-8 rounded-3xl mb-10 shadow-2xl space-y-6 relative overflow-hidden group">
                 
                 <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-purple-500 to-indigo-500"></div>
@@ -475,8 +549,85 @@ export default function AdminDashboard() {
             </div>
           )}
 
+          {/* ✅ Pricing */}
+{activeMenu === "pricing" && (
+  <div className="bg-[#131927] border border-white/10 p-6 sm:p-8 rounded-3xl shadow-xl">
+
+    <h2 className="text-xl font-bold mb-6 text-white">Manage Pricing Plans</h2>
+
+    {/* ➕ ADD PLAN */}
+    <div className="grid gap-4 mb-8">
+      
+      <input
+        placeholder="Plan Name (Basic / Pro / Premium)"
+        value={planName}
+        onChange={(e) => setPlanName(e.target.value)}
+        className="p-3 rounded-xl bg-white/5 border border-white/10"
+      />
+
+      <input
+        placeholder="Price (₹)"
+        value={price}
+        onChange={(e) => setPrice(e.target.value)}
+        className="p-3 rounded-xl bg-white/5 border border-white/10"
+      />
+
+      <select
+        value={duration}
+        onChange={(e) => setDuration(e.target.value)}
+        className="p-3 rounded-xl bg-white/5 border border-white/10"
+      >
+        <option value="monthly">Monthly</option>
+        <option value="yearly">Yearly</option>
+        <option value="lifetime">Lifetime</option>
+      </select>
+
+      <input
+        placeholder="Features (comma separated)"
+        value={features}
+        onChange={(e) => setFeatures(e.target.value)}
+        className="p-3 rounded-xl bg-white/5 border border-white/10"
+      />
+
+      <button
+        onClick={addPlan}
+        className="bg-gradient-to-r from-purple-600 to-indigo-600 py-3 rounded-xl font-bold"
+      >
+        Add Plan
+      </button>
+    </div>
+
+    {/* 📦 PLAN LIST */}
+    <div className="space-y-4">
+      {plans.map((plan) => (
+        <div
+          key={plan._id}
+          className="flex justify-between items-center bg-white/5 border border-white/10 p-4 rounded-xl"
+        >
+          <div>
+            <p className="font-bold text-white">{plan.name}</p>
+            <p className="text-sm text-gray-400">
+              ₹{plan.price} / {plan.duration}
+            </p>
+            <p className="text-xs text-gray-500 mt-1">
+              {plan.features?.join(", ")}
+            </p>
+          </div>
+
+          <button
+            onClick={() => deletePlan(plan._id)}
+            className="text-red-400 text-sm"
+          >
+            Delete
+          </button>
+        </div>
+      ))}
+    </div>
+
+  </div>
+)}
           {/* MEDIA GRID */}
-          {activeMenu !== "newsletter" && activeMenu !== "users" && activeMenu !== "subscriptions" && (
+          {activeMenu !== "newsletter" && activeMenu !== "users" && activeMenu !== "subscriptions" && activeMenu !== "pricing" && (
             <div>
               {media.length === 0 ? (
                 <div className="text-center py-20 border border-white/10 border-dashed rounded-3xl text-gray-500 bg-[#131927]/50">
